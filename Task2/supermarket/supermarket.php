@@ -18,11 +18,11 @@ include_once "layout/header.php" ?>
         </div>
         <div class="form-group">
             <label for="exampleFormControlSelect2">City</label>
-            <select name="city" value="<?=$_POST["city"]?? "cairo"?>"  class="form-control" id="exampleFormControlSelect2">
-            <option value="cairo">cairo</option>
-            <option value="giza">Giza</option>
-            <option value="alex" >Alex</option>
-            <option value="other">Ohter</option>
+            <select name="city"  class="form-control" id="exampleFormControlSelect2">
+            <option value="cairo" <?=isset($_POST["city"]) && $_POST["city"]=="cairo"? "selected":"" ?> >cairo</option>
+            <option value="giza" <?=isset($_POST["city"]) && $_POST["city"]=="giza"? "selected":"" ?> >Giza</option>
+            <option value="alex" <?=isset($_POST["city"]) && $_POST["city"]=="alex"? "selected":"" ?> >Alex</option>
+            <option value="other" <?=isset($_POST["city"]) && $_POST["city"]=="other"? "selected":"" ?> >Ohter</option>
             </select>
         </div>
         <div class="form-group">
@@ -78,7 +78,7 @@ include_once "layout/header.php" ?>
             </thead>
             <tbody>
                 <?php for($i=0;$i<$_POST["num"];$i++) {
-                     $total+= $_POST["price".$i] * $_POST["price".$i];
+                     $total+= $_POST["price".$i] * $_POST["quen".$i];
                     ?>
                     <tr>
                         <td> <?=$_POST["pname".$i]?? ""?> </td>
