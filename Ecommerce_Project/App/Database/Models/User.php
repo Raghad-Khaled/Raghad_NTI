@@ -5,12 +5,18 @@ use App\Database\Models\Contract\HasCrud;
 use App\Database\Models\Model;
 
 class User extends Model implements HasCrud {
-    private $id,$first_name,$last_name,$gender,$image,$phone,$verification_code,$email_verified_at,
+    private $id, $first_name, $last_name, $gender, $image, $email, $password, $phone, $verification_code, $email_verified_at,
     $status,$created_at,$updated_at;
 
     public function create() : bool
     {
-        return true;
+        $querey = "INSERT INTO users (first_name,last_name,email,password,phone,gender,verification_code) VALUES (?,?,?,?,?,?,?)";
+        $stmt = $this->conn->prepare($querey);
+        if (!$stmt) {
+            return false;
+        }
+        $stmt->bind_param("ssssssi", $this->first_name, $this->last_name, $this->email, $this->password, $this->phone, $this->gender, $this->verification_code);
+        return $stmt->execute();
     }
 
 
@@ -28,8 +34,87 @@ class User extends Model implements HasCrud {
     {
         return true;
     }
-    
 
+    public function checkVerifiedCode()
+    {
+        $querey = "SELECT * FROM users WHERE email= ? and verification_code= ?";
+        $stmt = $this->conn->prepare($querey);
+        if (!$stmt) {
+            return false;
+        }
+        $stmt->bind_param("si", $this->email, $this->verification_code);
+        $stmt->execute();
+        return $stmt->get_result();
+    }
+
+    public function makeUserVirified()
+    {
+        $querey = "UPDATE users SET email_verified_at= ?  WHERE email= ?";
+        $stmt = $this->conn->prepare($querey);
+        if (!$stmt) {
+            return false;
+        }
+        $stmt->bind_param("ss", $this->email_verified_at, $this->email);
+        return $stmt->execute();
+    }
+
+    public function getbyEmail()
+    {
+        $query = "SELECT * FROM users WHERE email = ? ";
+        $stmt = $this->conn->prepare($query);
+        if (!$stmt) {
+            return false;
+        }
+        $stmt->bind_param('s', $this->email);
+        $stmt->execute();
+        return $stmt->get_result();
+    }
+
+    public function updateImage()
+    {
+        $querey = "UPDATE users SET image= ?  WHERE email= ?";
+        $stmt = $this->conn->prepare($querey);
+        if (!$stmt) {
+            return false;
+        }
+        $stmt->bind_param("ss", $this->image, $this->email);
+        return $stmt->execute();
+    }
+
+    public function updateData()
+    {
+        $querey = "UPDATE users SET first_name= ?, last_name=?, gender=?  WHERE email= ?";
+        $stmt = $this->conn->prepare($querey);
+        if (!$stmt) {
+            return false;
+        }
+        $stmt->bind_param("ssss", $this->first_name, $this->last_name, $this->gender, $this->email);
+        return $stmt->execute();
+    }
+
+    public function updatePassword()
+    {
+        $querey = "UPDATE users SET password= ?  WHERE email= ?";
+        $stmt = $this->conn->prepare($querey);
+        if (!$stmt) {
+            return false;
+        }
+        $stmt->bind_param("ss", $this->password, $this->email);
+        return $stmt->execute();
+    }
+
+    public function updateVerificationCode()
+    {
+        $querey = "UPDATE users SET verification_code= ?  WHERE email= ?";
+        $stmt = $this->conn->prepare($querey);
+        if (!$stmt) {
+            return false;
+        }
+        $stmt->bind_param("is", $this->verification_code, $this->email);
+        return $stmt->execute();
+    }
+
+    
     /**
      * Get the value of id
      */ 
@@ -246,6 +331,46 @@ class User extends Model implements HasCrud {
     public function setUpdated_at($updated_at)
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of email
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * Set the value of email
+     *
+     * @return  self
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of password
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * Set the value of password
+     *
+     * @return  self
+     */
+    public function setPassword($password)
+    {
+        $this->password = password_hash($password, PASSWORD_DEFAULT);
 
         return $this;
     }

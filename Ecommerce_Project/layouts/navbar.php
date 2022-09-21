@@ -70,32 +70,7 @@
                                             </li>
                                         </ul>
                                     </li>
-                                    <li class="top-hover"><a href="blog-left-sidebar.html">blog</a>
-                                        <ul class="submenu">
-                                            <li><a href="blog-masonry.html">Blog Masonry</a></li>
-                                            <li><a href="#">Blog Standard <span><i
-                                                            class="ion-ios-arrow-right"></i></span></a>
-                                                <ul class="lavel-menu">
-                                                    <li><a href="blog-left-sidebar.html">left sidebar</a></li>
-                                                    <li><a href="blog-right-sidebar.html">right sidebar</a></li>
-                                                    <li><a href="blog-no-sidebar.html">no sidebar</a></li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="#">Post Types <span><i class="ion-ios-arrow-right"></i></span>
-                                                </a>
-                                                <ul class="lavel-menu">
-                                                    <li><a href="blog-details-standerd.html">Standard post</a>
-                                                    </li>
-                                                    <li><a href="blog-details-audio.html">audio post</a></li>
-                                                    <li><a href="blog-details-video.html">video post</a></li>
-                                                    <li><a href="blog-details-gallery.html">gallery post</a>
-                                                    </li>
-                                                    <li><a href="blog-details-link.html">link post</a></li>
-                                                    <li><a href="blog-details-quote.html">quote post</a></li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </li>
+
                                     <li class="top-hover"><a href="#">pages</a>
                                         <ul class="submenu">
                                             <li><a href="about-us.html">about us </a></li>
@@ -114,18 +89,30 @@
                                 </ul>
                             </nav>
                         </div>
-                        <div class="header-currency">
-                            <span class="digit">USD <i class="ti-angle-down"></i></span>
-                            <div class="dollar-submenu">
-                                <ul>
-                                    <li><a href="#">$ USD</a></li>
-                                    <li><a href="#">€ EUR</a></li>
-                                    <li><a href="#">£ GBP</a></li>
-                                    <li><a href="#">₹ INR</a></li>
-                                    <li><a href="#">¥ JPY</a></li>
-                                </ul>
+                        <?php if (isset($_SESSION['user'])) { ?>
+                            <div class="header-currency">
+                                <span class="digit"> <?= $_SESSION['user']->first_name ?> <i class="ti-angle-down"></i></span>
+                                <div class="dollar-submenu">
+                                    <ul>
+                                        <li><a href="my-account.php"> My Acount</a></li>
+                                        <li><a href="logout.php">Logout</a></li>
+
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
+                        <?php } else { ?>
+                            <div class="header-currency">
+                                <span class="digit"> Welcome <i class="ti-angle-down"></i></span>
+                                <div class="dollar-submenu">
+                                    <ul>
+                                        <li><a href="login.php"> Log In</a></li>
+                                        <li><a href="register.php">Register </a></li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                        <?php } ?>
+
                         <div class="header-cart">
                             <a href="#">
                                 <div class="cart-icon">

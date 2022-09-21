@@ -8,6 +8,7 @@ class Validation
     private $value;
     private string $valueName;
     private array $errors=[];
+    private array $oldValues = [];
 
     public function required() : self
     {
@@ -26,6 +27,14 @@ class Validation
         return $this;
     }
 
+    public function digits(int $len): self
+    {
+        if (strlen($this->value) != $len) {
+            $this->errors[$this->valueName][__FUNCTION__] = "{$this->valueName} length should be {$len}";
+        }
+        return $this;
+    }
+
     public function in(array $values) : self
     {
         if(!in_array($this->value,$values)){
@@ -36,16 +45,16 @@ class Validation
 
     public function isstring() : self
     {
-        if(!is_string($this->value)){
+        if (is_numeric($this->value) && is_int(0 + $this->value)) {
             $this->errors[$this->valueName][__FUNCTION__]="{$this->valueName} should be string";
         }
         return $this;
     }
 
-    public function regex($pattern) : self
+    public function regex($pattern, $message = null): self
     {
         if(! preg_match($pattern,$this->value)){
-            $this->errors[$this->valueName][__FUNCTION__]="{$this->valueName} Invalid";
+            $this->errors[$this->valueName][__FUNCTION__] = $message ? $message : "{$this->valueName} Invalid";
         }
         return $this;
     }
@@ -157,5 +166,33 @@ class Validation
         return $message?"<div class='alert alert-danger' role='alert'>".$message." </div>" :"";
     }
 
-    
+
+
+    /**
+     * Get the value of oldValues
+     */
+    public function getOldValues()
+    {
+        return $this->oldValues;
+    }
+
+    /**
+     * Set the value of oldValues
+     *
+     * @return  self
+     */
+    public function setOldValues($oldValues)
+    {
+        $this->oldValues = $oldValues;
+
+        return $this;
+    }
+
+    public function getOldValue($inputName): ?string
+    {
+        if (isset($this->oldValues[$inputName])) {
+            return $this->oldValues[$inputName];
+        }
+        return null;
+    }
 }

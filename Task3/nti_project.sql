@@ -28,14 +28,14 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `addresses` (
-  `id` bigint(20) NOT NULL,
+  `id` bigint(20) PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `street` varchar(100) NOT NULL,
   `building` varchar(100) NOT NULL,
   `floor` varchar(100) NOT NULL,
   `flat` varchar(100) NOT NULL,
   `notes` varchar(255) DEFAULT NULL,
   `user_id` bigint(20) DEFAULT NULL,
-  `city_id` bigint(20) DEFAULT NULL,
+  `region_id` bigint(20) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -47,10 +47,10 @@ CREATE TABLE `addresses` (
 --
 
 CREATE TABLE `admins` (
-  `id` bigint(20) NOT NULL,
+  `id` bigint(20) PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `first_name` varchar(20) NOT NULL,
   `last_name` varchar(20) NOT NULL,
-  `eamil` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `phone` varchar(11) NOT NULL,
   `image` varchar(20) DEFAULT 'default.png',
@@ -69,7 +69,7 @@ CREATE TABLE `admins` (
 --
 
 CREATE TABLE `brands` (
-  `id` bigint(20) NOT NULL,
+  `id` bigint(20) PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `name_ar` varchar(100) NOT NULL,
   `name_en` varchar(100) NOT NULL,
   `image` varchar(20) DEFAULT 'default.png',
@@ -97,7 +97,7 @@ CREATE TABLE `carts` (
 --
 
 CREATE TABLE `categories` (
-  `id` bigint(20) NOT NULL,
+  `id` bigint(20) PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `name_ar` varchar(100) NOT NULL,
   `name_en` varchar(100) NOT NULL,
   `image` varchar(20) DEFAULT 'default.png',
@@ -113,11 +113,10 @@ CREATE TABLE `categories` (
 --
 
 CREATE TABLE `cities` (
-  `id` bigint(20) NOT NULL,
+  `id` bigint(20) PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `name_ar` varchar(100) NOT NULL,
   `name_en` varchar(100) NOT NULL,
   `status` tinyint(1) DEFAULT NULL COMMENT '0=> not active 1=>active',
-  `region_id` bigint(20) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -129,7 +128,7 @@ CREATE TABLE `cities` (
 --
 
 CREATE TABLE `coupons` (
-  `id` bigint(20) NOT NULL,
+  `id` bigint(20) PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `code` bigint(20) NOT NULL,
   `discount` int(10) NOT NULL,
   `discount_type` varchar(20) NOT NULL,
@@ -161,7 +160,7 @@ CREATE TABLE `favs` (
 --
 
 CREATE TABLE `offers` (
-  `id` bigint(20) NOT NULL,
+  `id` bigint(20) PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `title` varchar(100) NOT NULL,
   `image` varchar(100) DEFAULT 'default.png',
   `discount` varchar(100) NOT NULL,
@@ -179,7 +178,7 @@ CREATE TABLE `offers` (
 --
 
 CREATE TABLE `orders` (
-  `id` bigint(20) NOT NULL,
+  `id` bigint(20) PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `status` tinyint(1) NOT NULL COMMENT '0=> not active 1=> active',
   `delivered_at` timestamp NULL DEFAULT NULL,
   `address_id` bigint(20) DEFAULT NULL,
@@ -207,7 +206,7 @@ CREATE TABLE `order_product` (
 --
 
 CREATE TABLE `products` (
-  `id` bigint(20) NOT NULL,
+  `id` bigint(20) PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `name_ar` varchar(100) NOT NULL,
   `name_en` varchar(100) NOT NULL,
   `code` bigint(20) DEFAULT NULL,
@@ -230,10 +229,11 @@ CREATE TABLE `products` (
 --
 
 CREATE TABLE `regions` (
-  `id` bigint(20) NOT NULL,
+  `id` bigint(20) PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `name_ar` varchar(100) NOT NULL,
   `name_en` varchar(100) NOT NULL,
   `status` tinyint(1) DEFAULT NULL COMMENT '0=> not active 1=> active',
+  `city_id` bigint(20) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -258,7 +258,7 @@ CREATE TABLE `reviews` (
 --
 
 CREATE TABLE `specs` (
-  `id` bigint(20) NOT NULL,
+  `id` bigint(20) PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
   `value` varchar(50) NOT NULL,
   `prouduct_id` bigint(20) DEFAULT NULL
@@ -271,7 +271,7 @@ CREATE TABLE `specs` (
 --
 
 CREATE TABLE `subcategories` (
-  `id` bigint(20) NOT NULL,
+  `id` bigint(20) PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `name_ar` varchar(100) NOT NULL,
   `name_en` varchar(100) NOT NULL,
   `image` varchar(20) DEFAULT 'default.png',
@@ -288,10 +288,10 @@ CREATE TABLE `subcategories` (
 --
 
 CREATE TABLE `users` (
-  `id` bigint(20) NOT NULL,
+  `id` bigint(20) PRIMARY KEY NOT NULL AUTO_INCREMENT,
   `first_name` varchar(20) NOT NULL,
   `last_name` varchar(20) NOT NULL,
-  `eamil` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `phone` varchar(11) NOT NULL,
   `image` varchar(20) DEFAULT 'default.png',
@@ -311,23 +311,19 @@ CREATE TABLE `users` (
 -- Indexes for table `addresses`
 --
 ALTER TABLE `addresses`
-  ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`),
-  ADD KEY `city_id` (`city_id`);
+  ADD KEY `region_id` (`region_id`);
 
 --
 -- Indexes for table `admins`
 --
 ALTER TABLE `admins`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `eamil` (`eamil`),
+  ADD UNIQUE KEY `email` (`email`),
   ADD UNIQUE KEY `phone` (`phone`);
 
 --
 -- Indexes for table `brands`
 --
-ALTER TABLE `brands`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `carts`
@@ -339,21 +335,17 @@ ALTER TABLE `carts`
 --
 -- Indexes for table `categories`
 --
-ALTER TABLE `categories`
-  ADD PRIMARY KEY (`id`);
+
 
 --
 -- Indexes for table `cities`
 --
-ALTER TABLE `cities`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `region_id` (`region_id`);
+
 
 --
 -- Indexes for table `coupons`
 --
 ALTER TABLE `coupons`
-  ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `code` (`code`);
 
 --
@@ -366,14 +358,11 @@ ALTER TABLE `favs`
 --
 -- Indexes for table `offers`
 --
-ALTER TABLE `offers`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `orders`
 --
 ALTER TABLE `orders`
-  ADD PRIMARY KEY (`id`),
   ADD KEY `address_id` (`address_id`);
 
 --
@@ -387,7 +376,6 @@ ALTER TABLE `order_product`
 -- Indexes for table `products`
 --
 ALTER TABLE `products`
-  ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `code` (`code`),
   ADD KEY `brand_id` (`brand_id`),
   ADD KEY `subcatigory_id` (`subcatigory_id`);
@@ -396,7 +384,7 @@ ALTER TABLE `products`
 -- Indexes for table `regions`
 --
 ALTER TABLE `regions`
-  ADD PRIMARY KEY (`id`);
+    ADD KEY `city_id` (`city_id`);
 
 --
 -- Indexes for table `reviews`
@@ -409,81 +397,24 @@ ALTER TABLE `reviews`
 -- Indexes for table `specs`
 --
 ALTER TABLE `specs`
-  ADD PRIMARY KEY (`id`),
   ADD KEY `prouduct_id` (`prouduct_id`);
 
 --
 -- Indexes for table `subcategories`
 --
 ALTER TABLE `subcategories`
-  ADD PRIMARY KEY (`id`),
   ADD KEY `category_id` (`category_id`);
 
 --
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `eamil` (`eamil`),
+  ADD UNIQUE KEY `email` (`email`),
   ADD UNIQUE KEY `phone` (`phone`);
 
 --
 -- AUTO_INCREMENT for dumped tables
 --
-
---
--- AUTO_INCREMENT for table `addresses`
---
-ALTER TABLE `addresses`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `admins`
---
-ALTER TABLE `admins`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `brands`
---
-ALTER TABLE `brands`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `coupons`
---
-ALTER TABLE `coupons`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `offers`
---
-ALTER TABLE `offers`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `orders`
---
-ALTER TABLE `orders`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `products`
---
-ALTER TABLE `products`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `specs`
---
-ALTER TABLE `specs`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `subcategories`
---
-ALTER TABLE `subcategories`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
@@ -494,7 +425,7 @@ ALTER TABLE `subcategories`
 --
 ALTER TABLE `addresses`
   ADD CONSTRAINT `addresses_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-  ADD CONSTRAINT `addresses_ibfk_2` FOREIGN KEY (`city_id`) REFERENCES `cities` (`id`);
+  ADD CONSTRAINT `addresses_ibfk_2` FOREIGN KEY (`region_id`) REFERENCES `regions` (`id`);
 
 --
 -- Constraints for table `carts`
@@ -506,8 +437,8 @@ ALTER TABLE `carts`
 --
 -- Constraints for table `cities`
 --
-ALTER TABLE `cities`
-  ADD CONSTRAINT `cities_ibfk_1` FOREIGN KEY (`region_id`) REFERENCES `regions` (`id`);
+ALTER TABLE `regions`
+  ADD CONSTRAINT `cities_ibfk_1` FOREIGN KEY (`city_id`) REFERENCES `cities` (`id`);
 
 --
 -- Constraints for table `favs`

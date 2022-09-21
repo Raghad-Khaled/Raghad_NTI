@@ -1,11 +1,26 @@
-<?php require "vendor/autoload.php" ?>
+<?php
+
+use App\Database\Models\User;
+
+ob_start();
+session_start();
+require "vendor/autoload.php";
+//check if user has cookies and not login if true then get the data of user in the session 
+if (isset($_COOKIE['remember_me']) && empty($_SESSION['user'])) {
+    $user = new User;
+    $user->setEmail($_COOKIE['remember_me']);
+    $databaseUser = $user->getbyEmail()->fetch_object();
+    $_SESSION['user'] = $databaseUser;
+}
+
+?>
 <!doctype html>
 <html class="no-js" lang="zxx">
 
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title><?=$title?></title>
+    <title><?= $title ?></title>
     <meta name="description" content="">
     <meta name="robots" content="noindex, follow" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
