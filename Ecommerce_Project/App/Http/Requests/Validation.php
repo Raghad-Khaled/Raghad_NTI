@@ -27,6 +27,15 @@ class Validation
         return $this;
     }
 
+    public function betweenval(int $min, int $max): self
+    {
+        if ($this->value < $min || $this->value > $max) {
+            $this->errors[$this->valueName][__FUNCTION__] = "{$this->valueName} should be between {$min}:{$max}";
+        }
+        return $this;
+    }
+
+
     public function digits(int $len): self
     {
         if (strlen($this->value) != $len) {

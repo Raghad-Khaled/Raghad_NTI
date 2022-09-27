@@ -3,30 +3,14 @@
 namespace App\Database\Models;
 
 use App\Database\Models\Contract\HasCrud;
-use App\Database\Models\Model;
 
-class Product extends Model implements HasCrud
-{
-    private $id,$name_ar,$name_en,$price,$product_code,$quentity,$status,$image,
-        $details_ar, $details_en, $brand_id, $subcategory_id, $created_at, $updated_at, $category_id;
+class Brand extends Model  implements HasCrud  {
 
-    
+    private $id,$name_ar,$name_en,$status,$image,$created_at,$updated_at;
+
     public function create() : bool
     {
         return true;
-    }
-
-
-    public function read() : \mysqli_result
-    {
-        $query = "SELECT id,name_en,details_en,price,image FROM products WHERE status = 1 ORDER BY price , name_en";
-        return $this->conn->query($query);
-    }
-
-    public function getnews(): \mysqli_result
-    {
-        $query = "SELECT * FROM products WHERE status = 1 ORDER BY created_at DESC LIMIT 4";
-        return $this->conn->query($query);   
     }
 
     public function update(): bool
@@ -39,61 +23,13 @@ class Product extends Model implements HasCrud
         return true;
     }
 
-    public function getProductsByBrand(): \mysqli_result
+    public function read() :\mysqli_result
     {
-        $query = "SELECT id,name_en,details_en,price,image FROM products WHERE status = 1 AND brand_id = ? ORDER BY price , name_en";
-        $stmt =  $this->conn->prepare($query);
-        $stmt->bind_param('i', $this->brand_id);
-        $stmt->execute();
-        return $stmt->get_result();
-    }
-    public function getProductsBySub(): \mysqli_result
-    {
-        $query = "SELECT id,name_en,details_en,price,image FROM products WHERE status = 1 AND subcategory_id = ? ORDER BY price , name_en";
-        $stmt =  $this->conn->prepare($query);
-        $stmt->bind_param('i', $this->subcategory_id);
-        $stmt->execute();
-        return $stmt->get_result();
+        return $this->conn->query("SELECT id,image FROM brands where status = 1 ORDER BY name_en");
     }
 
-    public function find(): \mysqli_result
-    {
-        $query = "SELECT products.*,AVG(reviews.rate) as reviews_avg,
-        COUNT(reviews.user_id) as reviews_count,subcategories.name_en as subcategory_name_en,brands.name_en as brand_name_en,
-        categories.id as category_id,categories.name_en as category_name_en
-        FROM products
-        JOIN reviews
-        ON product_id = products.id
-        JOIN subcategories
-        ON subcategories.id=subcategory_id
-        JOIN brands
-        ON brands.id=brand_id
-        JOIN categories
-        ON categories.id= subcategories.category_id
-        WHERE products.status = 1 
-        GROUP BY  products.id
-        HAVING products.id=?";
-        $stmt =  $this->conn->prepare($query);
-        $stmt->bind_param('i', $this->id);
-        $stmt->execute();
-        return $stmt->get_result();
-    }
 
-    public function getProductsByCat(): \mysqli_result
-    {
-        $query = "SELECT products.id,products.name_en,products.details_en,products.price,products.image FROM products
-        JOIN subcategories ON 
-        subcategories.id = products.subcategory_id
-        WHERE products.status = 1 AND  subcategories.category_id= ? ORDER BY price , name_en";
-        $stmt =  $this->conn->prepare($query);
-        $stmt->bind_param('i', $this->category_id);
-        $stmt->execute();
-        return $stmt->get_result();
-    }
-    
-    
-
-    /**
+      /**
      * Get the value of id
      */ 
     public function getId()
@@ -369,26 +305,6 @@ class Product extends Model implements HasCrud
     public function setUpdated_at($updated_at)
     {
         $this->updated_at = $updated_at;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of category_id
-     */
-    public function getCategory_id()
-    {
-        return $this->category_id;
-    }
-
-    /**
-     * Set the value of category_id
-     *
-     * @return  self
-     */
-    public function setCategory_id($category_id)
-    {
-        $this->category_id = $category_id;
 
         return $this;
     }
