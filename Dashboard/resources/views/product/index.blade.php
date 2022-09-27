@@ -61,7 +61,12 @@
 
                             <td>
                                 <a href="{{route('dashboard.products.edit',$product->id)}}" class="btn btn-outline-warning">Edit</a>
-                                <a href="" class="btn btn-outline-danger">Delete</a>
+                                <form action="{{route('dashboard.products.delete',$product->id)}}" method="post" calss="d-inline">
+                                    @method('DELETE')
+                                    @csrf
+                                    <button type="submit" class="btn btn-outline-danger">Delete</button>
+                                </form>
+                               
                             </td>
                         </tr>
                         @endforeach

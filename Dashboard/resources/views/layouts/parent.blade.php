@@ -181,6 +181,20 @@
                         <i class="fas fa-th-large"></i>
                     </a>
                 </li>
+
+                <li class="nav-item">
+                    <div class="dropdown">
+                        <button class="btn btn-ligtht dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{ Auth::user()->first_name }}
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf    
+                                <button type="submit" class="btn btn-light btn-block" >Log Out</button>
+                            </form>
+                        </div>
+                      </div>
+                </li>
             </ul>
         </nav>
         <!-- /.navbar -->
