@@ -5,7 +5,8 @@
 
 @section('contant')
     <div class="container">
-        <form action="{{ route('dashboard.products.store') }}" method="post" enctype="multipart/form-data">
+        <form action="{{ route('dashboard.products.update',$product->id) }}" method="post" enctype="multipart/form-data">
+            @method('PUT')
             @csrf
             <div class="form-row">
                 <div class="col-6">
@@ -135,7 +136,7 @@
             </div>
 
             <div class="form-row">
-                <button type="submit" class="btn btn-primary btn-block mt-4">Edit</button>
+                <button type="submit" class="btn btn-primary btn-block mt-4">Update</button>
             </div>
 
 
