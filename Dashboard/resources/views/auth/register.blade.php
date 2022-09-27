@@ -12,11 +12,18 @@
         <form method="POST" action="{{ route('register') }}">
             @csrf
 
-            <!-- Name -->
+            <!-- First Name -->
             <div>
-                <x-input-label for="name" :value="__('Name')" />
+                <x-input-label for="name" :value="__('First Name')" />
 
-                <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus />
+                <x-text-input id="name" class="block mt-1 w-full" type="text" name="first_name" :value="old('first_name')" required autofocus />
+            </div>
+
+            <!-- Last Name -->
+            <div>
+                <x-input-label for="name" :value="__('Last Name')" />
+
+                <x-text-input id="name" class="block mt-1 w-full" type="text" name="last_name" :value="old('last_name')" required autofocus />
             </div>
 
             <!-- Email Address -->
@@ -24,6 +31,25 @@
                 <x-input-label for="email" :value="__('Email')" />
 
                 <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required />
+            </div>
+
+             <!--Phone -->
+             <div class="mt-4">
+                <x-input-label for="phone" :value="__('Phone')" />
+
+                <x-text-input id="phone" class="block mt-1 w-full" type="tel" name="phone" :value="old('phone')" required />
+            </div>
+
+             <!--Phone -->
+             <div class="mt-4">
+                <x-input-label for="gender" :value="__('Gender')" />
+
+                <select id="gender" name="gender" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option value="m">Male</option>
+                    <option value="f">Female</option>
+                </select>
+
+                
             </div>
 
             <!-- Password -->
