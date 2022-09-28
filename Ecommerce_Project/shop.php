@@ -23,6 +23,11 @@ if ($_GET) {
 } else {
     $products = $productObj->read()->fetch_all(MYSQLI_ASSOC);
 }
+
+if(count($products)==0){
+    header("location:404.php");
+    die;
+}
 ?>
 <div class="shop-page-area ptb-100">
     <div class="container">
