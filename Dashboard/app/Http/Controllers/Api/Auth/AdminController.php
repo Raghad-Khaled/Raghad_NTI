@@ -25,7 +25,7 @@ class AdminController extends Controller
 
         return response()->json(
             [
-                'token'=>$admin->createToken($request->device_name)->plainTextToken
+                'token'=>'Bearer '.$admin->createToken($request->device_name)->plainTextToken
             ]
         );
     }
@@ -42,7 +42,7 @@ class AdminController extends Controller
 
         return response()->json(
             [
-                'token'=>$admin->createToken($request->device_name)->plainTextToken
+                'token'=>'Bearer '.$admin->createToken($request->device_name)->plainTextToken
             ]
         );
     }
@@ -51,7 +51,7 @@ class AdminController extends Controller
     {
 
         // Revoke the token that was used to authenticate the current request...
-        $request->user()->currentAccessToken()->delete();
+        $request->user('sanctum')->currentAccessToken()->delete();
        
 
         return response()->json(
@@ -65,7 +65,7 @@ class AdminController extends Controller
     {
 
         // Revoke all tokens...
-        $request->user()->delete();
+        $request->user('sanctum')->delete();
        
 
         return response()->json(
@@ -78,6 +78,6 @@ class AdminController extends Controller
     public function account(Request $request)
     {
 
-        return response()->json($request->user()->toArray());
+        return response()->json($request->user('sanctum')->toArray());
     }
 }
