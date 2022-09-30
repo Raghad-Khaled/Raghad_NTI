@@ -29,6 +29,23 @@ class Product extends Model implements HasCrud
         return $this->conn->query($query);   
     }
 
+    public function getbest(): \mysqli_result
+    {
+        $query = "SELECT
+        products.id,
+        products.name_en,
+        products.image,
+        products.price,
+        COUNT(products.id) as ordertimes
+        FROM
+            products
+        JOIN order_product ON order_product.product_id = products.id
+        GROUP BY products.id
+        ORDER BY ordertimes DESC
+        LIMIT 4";
+        return $this->conn->query($query);
+    }
+
     public function update(): bool
     {
         return true;
